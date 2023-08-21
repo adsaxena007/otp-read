@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 function App() {
 
   const [otp, setOtp] = useState();
-  const [data, setData] = useState("sad");
+  const [data, setData] = useState("");
   useEffect(() => {
     const ac = new AbortController();
     navigator.credentials
