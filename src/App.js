@@ -1,30 +1,34 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 function App() {
 
-  const [otp, setOtp] = useState();
-  const [data, setData] = useState("");
-  useEffect(() => {
-    const ac = new AbortController();
-    navigator.credentials
-      .get({
-        otp: { transport: ["sms"] },
-        signal: ac.signal,
-      })
-      .then((otp) => {
-        setOtp(otp.code)
-        setData(JSON.stringify(otp))
-      })
-      .catch((err) => {
-        setData(err.message);
-        console.error(err);
+  const videoRef = useRef();
+
+  const getVideo = () => {
+    navigator.mediaDevices.getUserMedia({
+      video: { width: 1920, height: 1080 }
+    }).then((stream) => {
+      let video = videoRef.current;
+      video.srcObject = stream;
+      video.play().then(() => {
+      }).catch((err) => {
+        console.log(err);
       });
-  }, [])
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  useEffect(() => {
+    getVideo();
+  }, [videoRef])
 
   return (
     <div className="App">
-      <div>{`otp is = ${otp}`}</div>
-      <div>{`data is = ${data}`}</div>
+      <div>
+        <video ref={videoRef}></video>
+        <button></button>
+      </div>
     </div>
   );
 }
