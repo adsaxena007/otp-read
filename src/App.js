@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import './App.css';
-import { useState } from 'react';
 
 
 function App() {
