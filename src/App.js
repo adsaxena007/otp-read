@@ -64,8 +64,8 @@ function App() {
               onCanPlay={paintToCanvas}
               autoPlay
               onPlay={detectFaces}
-              playsinline
-              webkit-playsinline
+              playsInline
+              webkit-playsInline
 
               style={{
                 width: digitalKycDimensions.videoWidth,
