@@ -66,7 +66,7 @@ function App() {
               onPlay={detectFaces}
               playsInline
               webkit-playsInline
-
+              muted
               style={{
                 width: digitalKycDimensions.videoWidth,
                 height: digitalKycDimensions.videoHeight,
@@ -88,7 +88,7 @@ function App() {
           </div>
         }
       </div>
-    </div>
+    </div >
   );
 }
 
