@@ -1,56 +1,90 @@
+import { useRef } from 'react';
 import './App.css';
-import { useCallback, useRef } from 'react';
-import Webcam from "react-webcam";
+import { useState } from 'react';
+
 
 function App() {
+  const liveVideoFeed = useRef(null);
+  const canvasRef = useRef(null);
 
-  // const videoRef = useRef();
-  const webcamRef = useRef(null);
-  const capture = useCallback(
-    () => {
-      webcamRef.current.getScreenshot();
-    },
-    [webcamRef]
-  );
-  // const getVideo = () => {
-  //   navigator.mediaDevices.getUserMedia({
-  //     video: { width: 1920, height: 1080 }
-  //   }).then((stream) => {
-  //     let video = videoRef.current;
-  //     video.srcObject = stream;
-  //     video.play().then(() => {
-  //     }).catch((err) => {
-  //       console.log(err);
-  //     });
-  //   }).catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   getVideo();
-  // }, [videoRef])
-  const videoConstraints = {
-    width: 1280,
-    height: 720,
-    facingMode: "user"
+  const getCameraPermission = async () => {
+    if ("MediaRecorder" in window) {
+      try {
+        const videoConstraints = {
+          video: { facingMode: "user" },
+        };
+        const audioConstraints = { audio: true };
+        await navigator?.mediaDevices?.getUserMedia(audioConstraints);
+        const videoStream = await navigator?.mediaDevices?.getUserMedia(
+          videoConstraints
+        );
+        console.log("Video stream", videoStream);
+        liveVideoFeed.current.srcObject = videoStream;
+      } catch (err) {
+        console.log(err.message);
+      }
+    } else {
+      console.log("");
+    }
   };
+
+
+  const paintToCanvas = () => {
+    const video = liveVideoFeed.current;
+    const photo = canvasRef.current;
+    const ctx = photo.getContext("2d");
+    const width = 335;
+    const height = 260;
+    photo.width = width;
+    photo.height = height;
+
+
+    return setInterval(function () {
+      ctx.drawImage(video, 0, 0, width, height);
+    }, 200);
+  };
+
+
+  const detectFaces = async () => {
+    console.log("Hello");
+  };
+
+  const digitalKycDimensions = {
+    videoHeight: "332px",
+    videoWidth: "248px",
+  };
+
   return (
     <div className="App">
+      <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
       <div>
-        {/* <video ref={videoRef}></video>
-        <button></button> */}
-        <>
-          <Webcam
-            audio={false}
-            height={720}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            width={1280}
-            videoConstraints={videoConstraints}
-          />
-          <button onClick={capture}>Capture photo</button>
-        </>
+        {
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <video
+              ref={liveVideoFeed}
+              onCanPlay={paintToCanvas}
+              autoPlay
+              onPlay={detectFaces}
+              style={{
+                width: digitalKycDimensions.videoWidth,
+                height: digitalKycDimensions.videoHeight,
+                border: '2px solid black',
+                borderRadius: "16px",
+                margin: "12px",
+                display: `block`,
+                objectFit: "cover",
+                transform: "rotateY(180deg)",
+              }}
+            ></video>
+            <button
+              onClick={() => {
+                getCameraPermission();
+              }}
+            >
+              Open Camera
+            </button>
+          </div>
+        }
       </div>
     </div>
   );
