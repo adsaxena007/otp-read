@@ -65,6 +65,7 @@ function App() {
               autoPlay
               onPlay={detectFaces}
               playsinline
+              controls="true"
               style={{
                 width: digitalKycDimensions.videoWidth,
                 height: digitalKycDimensions.videoHeight,
