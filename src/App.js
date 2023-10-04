@@ -65,7 +65,8 @@ function App() {
               autoPlay
               onPlay={detectFaces}
               playsinline
-              controls="true"
+              webkit-playsinline
+
               style={{
                 width: digitalKycDimensions.videoWidth,
                 height: digitalKycDimensions.videoHeight,
