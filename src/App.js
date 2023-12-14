@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import './App.css';
 
 
 function App() {
   const liveVideoFeed = useRef(null);
   const canvasRef = useRef(null);
+  const [notFound, setNotFound] = useState("start");
 
   const getCameraPermission = async () => {
     if ("MediaRecorder" in window) {
@@ -29,12 +30,13 @@ function App() {
 
   const getLocationPermission = async () => {
     if (window?.webkit?.messageHandlers?.triggerAppEvent) {
+      setNotFound("true")
       window?.webkit?.messageHandlers?.triggerAppEvent?.postMessage({
         "eventName": "fetchCurrentLocation",
         "callback": "fetchLocationCallBack"
       });
     } else {
-      alert("not found")
+      setNotFound("false")
     }
   }
 
@@ -103,7 +105,9 @@ function App() {
             >
               Get Location Permissions
             </button>
-
+            <>
+              {notFound}
+            </>
           </div>
         }
       </div>
