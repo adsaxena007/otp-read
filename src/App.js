@@ -27,6 +27,13 @@ function App() {
     }
   };
 
+  const getLocationPermission = async () => {
+    window.webkit.messageHandlers.triggerAppEvent.postMessage({
+      "eventName": "fetchCurrentLocation",
+      "callback": "fetchLocationCallBack"
+    });
+  }
+
 
   const paintToCanvas = () => {
     const video = liveVideoFeed.current;
@@ -84,6 +91,15 @@ function App() {
             >
               Open Camera
             </button>
+
+            <button
+              onClick={() => {
+                getLocationPermission();
+              }}
+            >
+              Get Location Permissions
+            </button>
+
           </div>
         }
       </div>
