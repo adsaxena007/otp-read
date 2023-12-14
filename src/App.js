@@ -30,13 +30,22 @@ function App() {
 
   const getLocationPermission = async () => {
     if (window?.webkit?.messageHandlers?.triggerAppEvent) {
-      setNotFound("true")
       window?.webkit?.messageHandlers?.triggerAppEvent?.postMessage({
         "eventName": "fetchCurrentLocation",
         "callback": "fetchLocationCallBack"
       });
-    } else {
-      setNotFound("false")
+    }
+    if (window.webkit) {
+      setNotFound("webkit")
+      if (window.webkit.messageHandlers) {
+        setNotFound("messageHandlers")
+        if (window?.webkit?.messageHandlers?.triggerAppEvent) {
+          setNotFound("triggerAppEvent")
+          if (window?.webkit?.messageHandlers?.triggerAppEvent.postMessage) {
+            setNotFound("postMessage")
+          }
+        }
+      }
     }
   }
 
