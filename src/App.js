@@ -28,10 +28,14 @@ function App() {
   };
 
   const getLocationPermission = async () => {
-    window.webkit.messageHandlers.triggerAppEvent.postMessage({
-      "eventName": "fetchCurrentLocation",
-      "callback": "fetchLocationCallBack"
-    });
+    if (window?.webkit?.messageHandlers?.triggerAppEvent) {
+      window?.webkit?.messageHandlers?.triggerAppEvent?.postMessage({
+        "eventName": "fetchCurrentLocation",
+        "callback": "fetchLocationCallBack"
+      });
+    } else {
+      alert("not found")
+    }
   }
 
 
